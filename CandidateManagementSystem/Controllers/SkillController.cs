@@ -1,10 +1,12 @@
 ﻿using CandidateManagementSystem.Data;
 using CandidateManagementSystem.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace CandidateManagementSystem.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class SkillController : ControllerBase

@@ -1,4 +1,6 @@
 using CandidateManagementSystem.Data;
+using CandidateManagementSystem.Middleware;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -12,6 +14,8 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 });
 
 builder.Services.AddDbContext<CandidateDBContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddAuthentication("BasicAuthentication")
+        .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
 
 
 
@@ -20,9 +24,11 @@ builder.Services.AddControllers();
 var app = builder.Build();
 // Configure the HTTP request pipeline.
 //app.UseHttpsRedirection();
-//app.UseAuthorization();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
+app.UseMiddleware<BasicAuthenticationMiddleware>();
 
 
 var sampleTodos = new Todo[] {

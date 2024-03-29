@@ -1,5 +1,6 @@
 ﻿using CandidateManagementSystem.Data;
 using CandidateManagementSystem.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Elfie.Diagnostics;
 using Microsoft.EntityFrameworkCore;
@@ -7,7 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace CandidateManagementSystem.Controllers
 {
-
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CandidateController : ControllerBase

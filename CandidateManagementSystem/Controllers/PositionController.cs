@@ -2,9 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CandidateManagementSystem.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CandidateManagementSystem.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class PositionController : ControllerBase
