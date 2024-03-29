@@ -3,6 +3,7 @@ using System;
 using CandidateManagementSystem.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CandidateManagementSystem.Migrations
 {
     [DbContext(typeof(CandidateDBContext))]
-    partial class CandidateDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240328110744_SeedInitialData")]
+    partial class SeedInitialData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -40,9 +43,6 @@ namespace CandidateManagementSystem.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("Experience")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
@@ -62,18 +62,16 @@ namespace CandidateManagementSystem.Migrations
                         new
                         {
                             CandidateId = 1,
-                            Created = new DateTime(2024, 3, 28, 11, 25, 54, 811, DateTimeKind.Utc).AddTicks(1385),
+                            Created = new DateTime(2024, 3, 28, 11, 7, 44, 489, DateTimeKind.Utc).AddTicks(5697),
                             Email = "john.doe@example.com",
-                            Experience = 5,
                             Name = "John Doe",
                             Phone = "1234567890"
                         },
                         new
                         {
                             CandidateId = 2,
-                            Created = new DateTime(2024, 3, 28, 11, 25, 54, 811, DateTimeKind.Utc).AddTicks(1390),
+                            Created = new DateTime(2024, 3, 28, 11, 7, 44, 489, DateTimeKind.Utc).AddTicks(5747),
                             Email = "jane.doe@example.com",
-                            Experience = 1,
                             Name = "Jane Doe",
                             Phone = "0987654321"
                         });
@@ -139,84 +137,16 @@ namespace CandidateManagementSystem.Migrations
                         new
                         {
                             PositionId = 1,
-                            Created = new DateTime(2024, 3, 28, 11, 25, 54, 811, DateTimeKind.Utc).AddTicks(1128),
+                            Created = new DateTime(2024, 3, 28, 11, 7, 44, 489, DateTimeKind.Utc).AddTicks(5512),
                             Description = "Develops software.",
                             Title = "Software Developer"
                         },
                         new
                         {
                             PositionId = 2,
-                            Created = new DateTime(2024, 3, 28, 11, 25, 54, 811, DateTimeKind.Utc).AddTicks(1133),
+                            Created = new DateTime(2024, 3, 28, 11, 7, 44, 489, DateTimeKind.Utc).AddTicks(5517),
                             Description = "Works with data.",
                             Title = "Data Scientist"
-                        });
-                });
-
-            modelBuilder.Entity("CandidateManagementSystem.Models.Skill", b =>
-                {
-                    b.Property<int>("SkillId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("SkillId"));
-
-                    b.Property<DateTime?>("Archived")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("CandidateId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("Updated")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("YearsOfExperience")
-                        .HasColumnType("integer");
-
-                    b.HasKey("SkillId");
-
-                    b.HasIndex("CandidateId");
-
-                    b.ToTable("Skills");
-
-                    b.HasData(
-                        new
-                        {
-                            SkillId = 1,
-                            CandidateId = 1,
-                            Created = new DateTime(2024, 3, 28, 11, 25, 54, 811, DateTimeKind.Utc).AddTicks(1464),
-                            Name = "C#",
-                            YearsOfExperience = 5
-                        },
-                        new
-                        {
-                            SkillId = 2,
-                            CandidateId = 1,
-                            Created = new DateTime(2024, 3, 28, 11, 25, 54, 811, DateTimeKind.Utc).AddTicks(1468),
-                            Name = "JavaScript",
-                            YearsOfExperience = 3
-                        },
-                        new
-                        {
-                            SkillId = 3,
-                            CandidateId = 2,
-                            Created = new DateTime(2024, 3, 28, 11, 25, 54, 811, DateTimeKind.Utc).AddTicks(1470),
-                            Name = "SQL",
-                            YearsOfExperience = 4
-                        },
-                        new
-                        {
-                            SkillId = 4,
-                            CandidateId = 2,
-                            Created = new DateTime(2024, 3, 28, 11, 25, 54, 811, DateTimeKind.Utc).AddTicks(1472),
-                            Name = "Python",
-                            YearsOfExperience = 2
                         });
                 });
 
@@ -239,22 +169,9 @@ namespace CandidateManagementSystem.Migrations
                     b.Navigation("Position");
                 });
 
-            modelBuilder.Entity("CandidateManagementSystem.Models.Skill", b =>
-                {
-                    b.HasOne("CandidateManagementSystem.Models.Candidate", "Candidate")
-                        .WithMany("Skills")
-                        .HasForeignKey("CandidateId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Candidate");
-                });
-
             modelBuilder.Entity("CandidateManagementSystem.Models.Candidate", b =>
                 {
                     b.Navigation("CandidatePositions");
-
-                    b.Navigation("Skills");
                 });
 
             modelBuilder.Entity("CandidateManagementSystem.Models.Position", b =>

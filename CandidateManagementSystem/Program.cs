@@ -1,5 +1,7 @@
 using CandidateManagementSystem.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateSlimBuilder(args);
@@ -9,11 +11,18 @@ builder.Services.ConfigureHttpJsonOptions(options =>
     options.SerializerOptions.TypeInfoResolverChain.Insert(0, AppJsonSerializerContext.Default);
 });
 
-builder.Services.AddDbContext<CandidateDBContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<CandidateDBContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+
+
+builder.Services.AddControllers();
 
 var app = builder.Build();
+// Configure the HTTP request pipeline.
+//app.UseHttpsRedirection();
+//app.UseAuthorization();
 
+app.MapControllers();
 
 
 var sampleTodos = new Todo[] {
