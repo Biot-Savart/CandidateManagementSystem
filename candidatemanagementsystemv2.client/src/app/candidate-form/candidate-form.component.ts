@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ICandidatePosition, IPosition } from '../models/position';
 import { ISkill } from '../models/skill';
@@ -11,7 +11,7 @@ import { CandidateService } from '../services/candidate/candidate.service';
   styleUrls: ['./candidate-form.component.css'],
 })
 export class CandidateFormComponent implements OnInit {
-  candidateForm: FormGroup = this.formBuilder.group({
+  candidateForm: UntypedFormGroup = this.formBuilder.group({
     name: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
     phone: ['', [Validators.required, Validators.pattern(/^\+?\d{10,15}$/)]], // Example regex for phone numbers
@@ -23,7 +23,7 @@ export class CandidateFormComponent implements OnInit {
   positions: IPosition[] = []; // To store fetched positions
   selectedPositions: number[] = []; // To store selected position IDs
 
-  constructor(private formBuilder: FormBuilder,
+  constructor(private formBuilder: UntypedFormBuilder,
     private candidateService: CandidateService,
     private route: ActivatedRoute, private router: Router) { }
 
@@ -39,17 +39,17 @@ export class CandidateFormComponent implements OnInit {
     this.candidateService.getPositions().subscribe((positions) => {
       this.positions = positions;
       // Initialize the form array for positions
-      this.positions.forEach(() => this.positionsFormArray.value.push(new FormControl(false)));
+      this.positions.forEach(() => this.positionsFormArray.value.push(new UntypedFormControl(false)));
     });
   }
 
-  get positionsFormArray(): FormArray {
-    return this.candidateForm.get('positions') as FormArray;
+  get positionsFormArray(): UntypedFormArray {
+    return this.candidateForm.get('positions') as UntypedFormArray;
   }
 
   // Getter for easy access to the skills FormArray
-  get skills(): FormArray {
-    return this.candidateForm.get('skills') as FormArray;
+  get skills(): UntypedFormArray {
+    return this.candidateForm.get('skills') as UntypedFormArray;
   }
 
   // Method to add a new skill FormControl to the FormArray
