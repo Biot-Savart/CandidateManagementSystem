@@ -1,0 +1,51 @@
+<mat-card>
+  <mat-card-title>Add/Edit Candidate</mat-card-title>
+  <mat-card-content>
+    <form [formGroup]="candidateForm" (ngSubmit)="onSubmit()">
+      <mat-form-field appearance="fill">
+        <mat-label>Name</mat-label>
+        <input matInput formControlName="name">
+        <!--<mat-error *ngIf="candidateForm.get('name').errors?.required">Name is required</mat-error>-->
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email">
+        <!--<mat-error *ngIf="candidateForm.get('email').errors?.required">Email is required</mat-error>
+    <mat-error *ngIf="candidateForm.get('email').errors?.email">Enter a valid email</mat-error>-->
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Phone</mat-label>
+        <input matInput formControlName="phone">
+        <!--<mat-error *ngIf="candidateForm.get('phone').errors?.required">Phone is required</mat-error>
+    <mat-error *ngIf="candidateForm.get('phone').errors?.pattern">Enter a valid phone number</mat-error>-->
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Positions</mat-label>
+        <mat-select formControlName="positions" multiple>
+          <mat-option *ngFor="let position of positions" [value]="position.positionId">{{ position.title }} {{position.positionId}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Year Of Experience</mat-label>
+        <input matInput type="number" formControlName="experience">
+      </mat-form-field>
+
+      <div formArrayName="skills">
+        <div *ngFor="let skillGroup of skills.controls; let i = index" [formGroupName]="i">
+          <mat-form-field appearance="fill">
+            <mat-label>Skill {{i + 1}}</mat-label>
+            <input matInput formControlName="name">
+            <mat-icon matSuffix class="remove-icon" (click)="removeSkill(i)">remove_circle</mat-icon>
+          </mat-form-field>
+        </div>
+        <button mat-raised-button type="button" (click)="addSkill()">Add Skill</button>
+      </div>
+
+      <button mat-raised-button color="primary" type="submit" [disabled]="candidateForm.invalid">Submit</button>
+    </form>
+  </mat-card-content>
+</mat-card>

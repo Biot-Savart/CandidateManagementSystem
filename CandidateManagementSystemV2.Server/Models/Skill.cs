@@ -11,6 +11,6 @@
 
         // Foreign key for the Candidate this skill belongs to
         public int CandidateId { get; set; }
-        public Candidate? Candidate { get; set; } // Navigation property
+        //public Candidate? Candidate { get; set; } // Navigation property
     }
 }

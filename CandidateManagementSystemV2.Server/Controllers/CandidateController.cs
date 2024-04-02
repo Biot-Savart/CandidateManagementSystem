@@ -1,6 +1,10 @@
 ﻿using CandidateManagementSystemV2.Server.Data;
+using CandidateManagementSystemV2.Server.DTOs;
+using CandidateManagementSystemV2.Server.Interfaces;
 using CandidateManagementSystemV2.Server.Models;
+using CandidateManagementSystemV2.Server.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing.Matching;
 using Microsoft.EntityFrameworkCore;
 
 namespace CandidateManagementSystemV2.Server.Controllers
@@ -9,127 +13,86 @@ namespace CandidateManagementSystemV2.Server.Controllers
     [ApiController]
     public class CandidateController : ControllerBase
     {
-        private readonly CandidateDBContext _context;
+        private readonly ICandidateService _candidateService;
 
-        public CandidateController(CandidateDBContext context)
+        public CandidateController(ICandidateService candidateService)
         {
-            _context = context;
+            _candidateService = candidateService;
         }
 
         // GET: api/Candidate
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Candidate>>> GetCandidates()
+        public async Task<ActionResult<IEnumerable<CandidateDto>>> GetCandidates()
         {
-            return await _context.Candidates.ToListAsync();
-            // Consider using .Include() to load related data, like Skills
+            var candidatesDto = await _candidateService.GetAllCandidatesAsync();
+
+            return Ok(candidatesDto);
         }
 
         // GET: api/Candidate/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Candidate>> GetCandidate(int id)
+        public async Task<ActionResult<CandidateDto>> GetCandidate(int id)
         {
-            var candidate = await _context.Candidates.FindAsync(id);
+            var candidateDto = await _candidateService.GetCandidateByIdAsync(id);
 
-            if (candidate == null)
-            {
-                return NotFound();
-            }
-
-            return candidate;
+            return Ok(candidateDto);
         }
 
         // POST: api/Candidate
         [HttpPost]
-        public async Task<ActionResult<Candidate>> PostCandidate(Candidate candidate)
+        public async Task<ActionResult<CandidateDto>> PostCandidate(CandidateDto candidate)
         {
-            _context.Candidates.Add(candidate);
-            await _context.SaveChangesAsync();
+            await _candidateService.AddCandidateAsync(candidate);
 
             return CreatedAtAction("GetCandidate", new { id = candidate.CandidateId }, candidate);
         }
 
         // PUT: api/Candidate/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCandidate(int id, Candidate candidate)
+        public async Task<ActionResult<CandidateDto>> PutCandidate(int id, CandidateDto candidate)
         {
             if (id != candidate.CandidateId)
             {
-                return BadRequest();
+                return BadRequest("The ID provided in the path does not match the CandidateId in the payload.");
             }
-
-            _context.Entry(candidate).State = EntityState.Modified;
 
             try
             {
-                await _context.SaveChangesAsync();
+                return await _candidateService.UpdateCandidateAsync(id, candidate);
             }
-            catch (DbUpdateConcurrencyException)
+            catch (KeyNotFoundException ex)
             {
-                if (!CandidateExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                // Handle case where candidate doesn't exist
+                return NotFound(ex.Message);
             }
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                // Log the exception details here as needed
+                return StatusCode(500, "An error occurred while updating the candidate. " + ex.Message);
+            }
         }
+
 
         // DELETE: api/Candidate/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCandidate(int id)
         {
-            var candidate = await _context.Candidates.FindAsync(id);
-            if (candidate == null)
-            {
-                return NotFound();
-            }
-
-            candidate.Archived = DateTime.Now;
-
-            _context.Entry(candidate).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                await _candidateService.DeleteCandidateAsync(id);
+
+                return NoContent();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (KeyNotFoundException ex)
             {
-                if (!CandidateExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                // Handle case where candidate doesn't exist
+                return NotFound(ex.Message);
             }
-
-            return NoContent();
-        }
-
-        [HttpGet("BySkill/{skillName}")]
-        public async Task<ActionResult<IEnumerable<Candidate>>> GetCandidatesBySkill(string skillName)
-        {
-            var candidatesWithSkill = await _context.Candidates
-                .Where(c => c.Skills.Any(s => s.Name.ToLower() == skillName.ToLower()))
-                //.Include(c => c.Skills) // Optionally include skills in the result
-                .ToListAsync();
-
-            if (candidatesWithSkill == null || !candidatesWithSkill.Any())
+            catch (Exception ex)
             {
-                return NotFound(new { Message = $"No candidates found with skill: {skillName}" });
+                // Log the exception details here as needed
+                return StatusCode(500, "An error occurred while deleting the candidate. " + ex.Message);
             }
-
-            return candidatesWithSkill;
-        }
-
-        private bool CandidateExists(int id)
-        {
-            return _context.Candidates.Any(e => e.CandidateId == id);
         }
     }
 }

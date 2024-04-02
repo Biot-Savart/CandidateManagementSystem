@@ -1,0 +1,13 @@
+mat-form-field {
+  width: 100%; /* Ensure form fields take full width */
+  margin-bottom: 16px; /* Add some space between form fields */
+}
+
+mat-card {
+  margin: 20px; /* Add some margin around the card */
+}
+
+.remove-icon {
+  cursor: pointer;
+  color: red;
+}

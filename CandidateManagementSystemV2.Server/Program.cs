@@ -1,5 +1,7 @@
 using CandidateManagementSystemV2.Server.Data;
+using CandidateManagementSystemV2.Server.Interfaces;
 using CandidateManagementSystemV2.Server.Middleware;
+using CandidateManagementSystemV2.Server.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -11,11 +13,12 @@ builder.Services.AddDbContext<CandidateDBContext>(options => options.UseNpgsql(b
 builder.Services.AddAuthentication("BasicAuthentication")
         .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
 
-
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddScoped<ICandidateService, CandidateService>();
+builder.Services.AddScoped<IPositionService, PositionService>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-//builder.Services.AddSwaggerGen();
 
 builder.Services.AddSwaggerGen(c =>
 {
@@ -47,8 +50,23 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+// Configure CORS to allow all origins
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllOrigins",
+        policy =>
+        {
+            policy.AllowAnyOrigin()
+                  .AllowAnyMethod()
+                  .AllowAnyHeader();
+        });
+});
+
 
 var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+app.UseCors("AllowAllOrigins"); // Apply CORS policy
 
 app.UseDefaultFiles();
 app.UseStaticFiles();
