@@ -2,9 +2,9 @@
   <mat-toolbar color="primary" fxFlex="auto" fxLayoutAlign="start center">
     <button mat-button [matMenuTriggerFor]="menu"><mat-icon>menu</mat-icon> Menu</button>
     <mat-menu #menu="matMenu">
-      <button mat-menu-item routerLink="/candidates">Candidates List</button>
-      <button mat-menu-item routerLink="/candidate-add">Add Candidate</button>
-      <button mat-menu-item routerLink="/data-report">Data Report</button>
+      <button mat-menu-item routerLink="/candidates" routerLinkActive="active">Candidates List</button>
+      <button mat-menu-item routerLink="/candidate-add" routerLinkActive="active">Add Candidate</button>
+      <button mat-menu-item routerLink="/data-report" routerLinkActive="active">Data Report</button>
     </mat-menu>
   </mat-toolbar>
 </div>

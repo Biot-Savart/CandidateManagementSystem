@@ -22,4 +22,5 @@ table {
 
 .active {
   font-weight: bold;
+  background-color: lightgray;
 }
