@@ -22,6 +22,7 @@ Before you begin, ensure you have the following tools installed:
 - [Angular CLI](https://angular.io/cli)
 - [Docker](https://docs.docker.com/get-docker/) (optional for containerization)
 
+
 ### Installation
 
 1. **Clone the repository**
@@ -32,20 +33,34 @@ Before you begin, ensure you have the following tools installed:
 
 2. **Set up the backend**
 
-   Navigate to the server project directory and restore dependencies:
+   - Navigate to the server project directory and restore dependencies:
 
    ```bash
    cd CandidateManagementSystem/CandidateManagementSystemV2.Server
    dotnet restore
    ```
 
+   - Ensure you have the EF Core CLI installed globally. If you don't have it installed, you can install it using the following command:
+
+      ```bash
+      dotnet tool install --global dotnet-ef
+      ```
+      Make sure you're in the project directory where your .csproj file is located before running the commands below.
+
+   - Updating the Database
+      To apply the pending migrations to your database, use:
+      
+      ```bash
+      dotnet ef database update
+      ```
+   
    Run the application:
 
    ```bash
    dotnet run
    ```
 
-3. **Set up the frontend**
+4. **Set up the front end**
 
    Navigate to the client project directory and install npm packages:
 
