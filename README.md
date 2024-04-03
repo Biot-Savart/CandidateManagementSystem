@@ -1,54 +1,91 @@
-# CandidateManagementSystem
+# Candidate Management System
 
-# Candidate Management System Server
-
-The server side of the Candidate Management System is built using ASP.NET Core, providing a robust and scalable backend for managing candidates, their skills, positions, and related operations within the system.
-
-## Technology Stack
-
-- **Framework**: ASP.NET Core
-- **Database**: EF Core for ORM, with migrations for easy database schema updates
-- **Authentication**: Basic Authentication middleware for securing endpoints
-- **Logging and Configuration**: Built-in ASP.NET Core Logging, with appsettings.json for configuration management
-
-## Getting Started
-
-### Prerequisites
-
-- .NET 5.0 SDK or later
-- Visual Studio 2019 or later (or VS Code with C# extension)
-- SQL Server (for development, SQL Server Express is sufficient)
-
-### Setup Instructions
-
-1. Clone the repository to your local machine.
-2. Navigate to the `CandidateManagementSystemV2.Server` directory.
-3. Update the `appsettings.json` file with your database connection string.
-4. Run the following commands in the terminal to apply the database migrations:
-   ```
-   dotnet ef database update
-   ```
-5. Start the server by running:
-   ```
-   dotnet run
-   ```
-   Alternatively, you can use Visual Studio to build and run the server.
+The Candidate Management System is a full-stack web application designed to streamline the process of managing candidate information for recruitment purposes. This system allows for the creation, storage, and management of candidate profiles, including their skills and positions applied for. Built with Angular for the frontend and ASP.NET Core for the backend, it leverages modern web development practices to offer a responsive and intuitive user interface.
 
 ## Features
 
-- **Candidate Management**: Create, read, update, and delete operations for candidates.
-- **Position Management**: Manage positions that candidates can apply for.
-- **Skill Management**: Handle skills that can be assigned to candidates.
-- **Authentication**: Basic authentication to secure the API endpoints.
+- **Candidate Management**: Create, read, update, and delete (CRUD) operations for candidate profiles.
+- **Skill Tracking**: Associate specific skills with candidates and manage these associations.
+- **Position Application**: Track positions candidates have applied for, allowing for easy management of candidate-position relationships.
+- **Data Reporting**: Generate reports on aggregated candidate data, such as the number of candidates per skill.
+
+## Getting Started
+
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
+
+### Prerequisites
+
+Before you begin, ensure you have the following tools installed:
+
+- [.NET 6 SDK](https://dotnet.microsoft.com/download)
+- [Node.js and npm](https://nodejs.org/en/download/)
+- [Angular CLI](https://angular.io/cli)
+- [Docker](https://docs.docker.com/get-docker/) (optional for containerization)
+
+### Installation
+
+1. **Clone the repository**
+
+   ```bash
+   git clone https://github.com/Biot-Savart/CandidateManagementSystem.git
+   ```
+
+2. **Set up the backend**
+
+   Navigate to the server project directory and restore dependencies:
+
+   ```bash
+   cd CandidateManagementSystem/CandidateManagementSystemV2.Server
+   dotnet restore
+   ```
+
+   Run the application:
+
+   ```bash
+   dotnet run
+   ```
+
+3. **Set up the frontend**
+
+   Navigate to the client project directory and install npm packages:
+
+   ```bash
+   cd CandidateManagementSystem/candidatemanagementsystemv2.client
+   npm install
+   ```
+
+   Serve the Angular application:
+
+   ```bash
+   ng serve
+   ```
+
+   Visit `http://localhost:4200` in your browser.
+
+### Docker (Optional)
+
+If you prefer to run the application using Docker, follow these steps:
+
+```bash
+docker-compose up --build
+```
+
+This command builds and runs the Docker containers specified in the `docker-compose.yml` file.
+
+## Contributing
+
+We welcome contributions! Please read our [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## API Documentation
 
 For detailed API documentation, please refer to the Swagger UI once the server is running. Navigate to `/swagger` to access the API documentation.
 
-## Contribution
 
-We welcome contributions! Please feel free to fork the repository and submit pull requests.
+### Remember to replace placeholders (like URLs and feature descriptions) with actual data from your project. Tailoring the README to reflect your project accurately will help new users and contributors understand how to get involved.
 
-## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
