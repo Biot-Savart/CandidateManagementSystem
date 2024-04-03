@@ -53,90 +53,102 @@ namespace CandidateManagementSystemV2.Server.Services
                 throw new KeyNotFoundException($"Candidate with ID {id} not found.");
             }
 
-            candidate.Archived = DateTime.Now.ToUniversalTime();
-
-            _context.Entry(candidate).State = EntityState.Modified;
+            candidate.Archived = DateTime.UtcNow;
 
             await _context.SaveChangesAsync();
         }
 
         async Task<CandidateDto> ICandidateService.UpdateCandidateAsync(int id, CandidateDto candidateDto)
         {
-            var existingCandidate = await _context.Candidates.Include(c => c.Skills).Include(c => c.CandidatePositions).FirstOrDefaultAsync(c => c.CandidateId == id);
-            if (existingCandidate == null)
-            {
-                throw new KeyNotFoundException($"Candidate with ID {id} not found.");
-            }
-            
-            // Handle the Skills collection
-            foreach (var existingSkill in existingCandidate.Skills)
-            {
-                var newSkill = candidateDto.Skills?.FirstOrDefault(s => s.SkillId == existingSkill.SkillId);
-                if (newSkill == null)
-                    _context.Skills.Remove(existingSkill); // Skill was removed
-                else
-                    _context.Entry(existingSkill).CurrentValues.SetValues(newSkill); // Update existing skill
-            }
+            var existingCandidate = await GetCandidateOrThrowAsync(id);
 
-            // Add new skills
-            foreach (var newSkill in candidateDto.Skills)
-            {
-                if (!existingCandidate.Skills.Any(s => s.SkillId == newSkill.SkillId))
-                {
-                    Skill skill = new Skill { 
-                        Name = newSkill.Name, 
-                        YearsOfExperience= newSkill.YearsOfExperience,
-                        CandidateId = newSkill.CandidateId,
-                        //Created = DateTime.Now,
-                    };
-                    // New skill, need to set it up correctly in EF Core
-                    existingCandidate.Skills.Add(skill);
-                }
-            }
+            _mapper.Map(candidateDto, existingCandidate); // Assuming this maps basic properties
 
-            // First, remove unselected positions
-            var candidatePositions = existingCandidate.CandidatePositions?.ToList();
-            if (candidatePositions != null && candidateDto.CandidatePositions != null)
-            {
-                foreach (var position in candidatePositions)
-                {
-                    if (!candidateDto.CandidatePositions.Any(p => p.PositionId == position.PositionId))
-                    {
-                        existingCandidate.CandidatePositions?.Remove(position);
-                    }
-                }
-            }
-
-            if (candidateDto.CandidatePositions != null)
-            {
-                // Then, add new positions
-                foreach (var positionDto in candidateDto.CandidatePositions)
-                {
-                    if (!existingCandidate.CandidatePositions.Any(p => p.PositionId == positionDto.PositionId))
-                    {
-                        var position = await _context.Positions.FindAsync(positionDto.PositionId);
-                        CandidatePosition newCandidatePosition = new CandidatePosition
-                        {
-                            CandidateId = 1,
-                            PositionId = 2,
-                        };
-
-                        if (newCandidatePosition != null)
-                        {
-                            existingCandidate.CandidatePositions.Add(newCandidatePosition);
-                        }
-                        else
-                        {
-                            // Handle the case where a position ID from the DTO does not exist in the database
-                            // This might involve logging a warning, throwing an exception, or ignoring the entry
-                        }
-                    }
-                }
-            }
+            await UpdateSkills(existingCandidate.Skills, candidateDto.Skills);
+            await UpdateCandidatePositions(existingCandidate, candidateDto.CandidatePositions);
 
             await _context.SaveChangesAsync();
 
             return _mapper.Map<CandidateDto>(existingCandidate);
         }
+
+        private async Task<Candidate> GetCandidateOrThrowAsync(int candidateId)
+        {
+            var candidate = await _context.Candidates
+                .Include(c => c.Skills)
+                .Include(c => c.CandidatePositions)
+                .FirstOrDefaultAsync(c => c.CandidateId == candidateId && c.Archived == null);
+
+            if (candidate == null)
+            {
+                throw new KeyNotFoundException($"Candidate with ID {candidateId} not found.");
+            }
+
+            return candidate;
+        }
+
+        private async Task UpdateSkills(IEnumerable<Skill> existingSkills, IEnumerable<SkillDto> newSkillsDto)
+        {
+            // Assuming SkillDto is your DTO class for Skill entity
+            var newSkills = _mapper.Map<IEnumerable<Skill>>(newSkillsDto);
+
+            // Remove skills not present in the new list
+            foreach (var existingSkill in existingSkills.ToList())
+            {
+                if (!newSkills.Any(s => s.SkillId == existingSkill.SkillId))
+                {
+                    _context.Skills.Remove(existingSkill);
+                }
+            }
+
+            // Add or update skills
+            foreach (var newSkill in newSkills)
+            {
+                var existingSkill = existingSkills.FirstOrDefault(s => s.SkillId == newSkill.SkillId);
+                if (existingSkill != null)
+                {
+                    _context.Entry(existingSkill).CurrentValues.SetValues(newSkill);
+                }
+                else
+                {
+                    // Assuming you have a Candidate reference in your Skill entity to set this up correctly
+                    existingSkills.ToList().Add(newSkill);
+                }
+            }
+        }
+
+        private async Task UpdateCandidatePositions(Candidate existingCandidate, IEnumerable<CandidatePositionDto> newPositionDtos)
+        {
+            var newPositionIds = newPositionDtos.Select(np => np.PositionId).Distinct().ToList();
+            var existingPositionIds = existingCandidate.CandidatePositions.Select(cp => cp.PositionId).ToList();
+
+            var positionIdsToAdd = newPositionIds.Except(existingPositionIds).ToList();
+            var positionIdsToRemove = existingPositionIds.Except(newPositionIds).ToList();
+
+            // Fetch all relevant positions in a single query
+            var positionsToAdd = await _context.Positions
+                                       .Where(p => positionIdsToAdd.Contains(p.PositionId))
+                                       .ToListAsync();
+
+            foreach (var positionIdToRemove in positionIdsToRemove)
+            {
+                var positionToRemove = existingCandidate.CandidatePositions.FirstOrDefault(cp => cp.PositionId == positionIdToRemove);
+                if (positionToRemove != null)
+                {
+                    _context.CandidatePositions.Remove(positionToRemove);
+                }
+            }
+
+            foreach (var position in positionsToAdd)
+            {
+                existingCandidate.CandidatePositions.Add(new CandidatePosition
+                {
+                    CandidateId = existingCandidate.CandidateId,
+                    PositionId = position.PositionId
+                });
+            }
+        
+        }
+
     }
 }

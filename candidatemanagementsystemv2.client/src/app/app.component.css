@@ -24,3 +24,7 @@ table {
   font-weight: bold;
   background-color: lightgray;
 }
+
+.example-spacer {
+  flex: 1 1 auto;
+}

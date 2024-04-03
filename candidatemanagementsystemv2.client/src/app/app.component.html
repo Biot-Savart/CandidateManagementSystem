@@ -1,17 +1,24 @@
-<div fxLayout="row" fxLayoutAlign="space-between center">
-  <mat-toolbar color="primary" fxFlex="auto" fxLayoutAlign="start center">
-    <button mat-button [matMenuTriggerFor]="menu"><mat-icon>menu</mat-icon> Menu</button>
-    <mat-menu #menu="matMenu">
-      <button mat-menu-item routerLink="/candidates" routerLinkActive="active">Candidates List</button>
-      <button mat-menu-item routerLink="/candidate-add" routerLinkActive="active">Add Candidate</button>
-      <button mat-menu-item routerLink="/data-report" routerLinkActive="active">Data Report</button>
-    </mat-menu>
-  </mat-toolbar>
-</div>
-
-<div fxLayout="row">
-  <div fxFlex="auto">
-    <router-outlet></router-outlet>
+<mat-toolbar color="primary">
+  <span>Application Name</span>
+  <span class="example-spacer"></span>
+  <!-- Full-width navigation for larger screens -->
+  <div class="nav-links" *ngIf="activeMediaQuery === 'large'">
+    <a mat-button routerLink="/candidates" routerLinkActive="active">Candidates List</a>
+    <a mat-button routerLink="/candidate-add" routerLinkActive="active">Add Candidate</a>
+    <a mat-button routerLink="/data-report" routerLinkActive="active">Data Report</a>
   </div>
-</div>
 
+  <!-- Collapsible menu for smaller screens -->
+  <div *ngIf="activeMediaQuery === 'small'">
+    <button mat-icon-button [matMenuTriggerFor]="menu">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item routerLink="/candidates">Candidates List</button>
+      <button mat-menu-item routerLink="/candidate-add">Add Candidate</button>
+      <button mat-menu-item routerLink="/data-report">Data Report</button>
+    </mat-menu>
+  </div>
+</mat-toolbar>
+
+<router-outlet></router-outlet>
