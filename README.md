@@ -22,6 +22,17 @@ Before you begin, ensure you have the following tools installed:
 - [Angular CLI](https://angular.io/cli)
 - [Docker](https://docs.docker.com/get-docker/) (optional for containerization)
 
+### Login Credentials
+   To access the application, you can use the following default credentials. These credentials are intended for initial testing and development purposes only. Please ensure to change the default passwords and enforce stronger security measures in production environments.
+
+- For Development and Testing
+  - Username: admin
+  - Password: password
+
+Important Security Notice
+   The provided default credentials are for demonstration and development purposes only. Do not use these credentials in production environments.
+   Ensure that all default passwords are changed before deploying the application.
+   Consider implementing additional authentication measures, such as two-factor authentication (2FA), especially for administrative accounts.
 
 ### Installation
 
