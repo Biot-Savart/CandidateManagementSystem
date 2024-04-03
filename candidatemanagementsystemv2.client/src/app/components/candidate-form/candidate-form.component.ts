@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ICandidatePosition, IPosition } from '../models/position';
-import { ISkill } from '../models/skill';
-import { CandidateService } from '../services/candidate/candidate.service';
+import { ICandidatePosition, IPosition } from '../../models/position';
+import { ISkill } from '../../models/skill';
+import { CandidateService } from '../../services/candidate/candidate.service';
 
 @Component({
   selector: 'app-candidate-form',

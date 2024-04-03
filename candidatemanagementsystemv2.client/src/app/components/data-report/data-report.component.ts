@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ISkillCandidatesCount } from '../models/skill';
-import { SkillService } from '../services/skill/skill.service';
+import { ISkillCandidatesCount } from '../../models/skill';
+import { SkillService } from '../../services/skill/skill.service';
 
 @Component({
   selector: 'app-data-report',
