@@ -24,6 +24,7 @@ import { PositionsDisplayPipe } from './pipes/positions-display.pipe';
 import { SkillsDisplayPipe } from './pipes/skills-display.pipe';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatMenuModule } from '@angular/material/menu';
+import { NgChartsModule } from 'ng2-charts';
 
 
 // Define routes
@@ -50,7 +51,7 @@ const routes: Routes = [
   imports: [
     BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterModule, RouterModule.forRoot(routes),
     MatTableModule, MatButtonModule, MatToolbarModule, MatIconModule, FormsModule, MatCardModule, MatFormFieldModule, MatInputModule, ReactiveFormsModule,
-    MatSelectModule, MatListModule, FlexLayoutModule, MatMenuModule
+    MatSelectModule, MatListModule, FlexLayoutModule, MatMenuModule, NgChartsModule
 
   ],
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }],
