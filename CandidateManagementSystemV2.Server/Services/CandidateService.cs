@@ -21,10 +21,11 @@ namespace CandidateManagementSystemV2.Server.Services
         public async Task<IEnumerable<CandidateDto>> GetAllCandidatesAsync()
         {
             var candidates = await _context.Candidates.Include(c => c.Skills).Include(c => c.CandidatePositions).ThenInclude(cp => cp.Position).Where(c => c.Archived == null).ToListAsync();
+            var cadidateDto = _mapper.Map<IEnumerable<CandidateDto>>(candidates);
             return _mapper.Map<IEnumerable<CandidateDto>>(candidates);
         }
 
-        async Task<CandidateDto> ICandidateService.GetCandidateByIdAsync(int id)
+        public async Task<CandidateDto> GetCandidateByIdAsync(int id)
         {
             var candidate = await _context.Candidates.Include(c => c.Skills).Include(c => c.CandidatePositions).ThenInclude(cp => cp.Position).FirstOrDefaultAsync(c => c.CandidateId == id);
 
@@ -44,7 +45,7 @@ namespace CandidateManagementSystemV2.Server.Services
             return _mapper.Map<CandidateDto>(candidate);
         }
 
-        async Task ICandidateService.DeleteCandidateAsync(int id)
+       public async Task DeleteCandidateAsync(int id)
         {
             var candidate = await _context.Candidates.FindAsync(id) ?? throw new KeyNotFoundException($"Candidate with ID {id} not found.");
 
@@ -58,7 +59,7 @@ namespace CandidateManagementSystemV2.Server.Services
             await _context.SaveChangesAsync();
         }
 
-        async Task<CandidateDto> ICandidateService.UpdateCandidateAsync(int id, CandidateDto candidateDto)
+        public async Task<CandidateDto> UpdateCandidateAsync(int id, CandidateDto candidateDto)
         {
             var existingCandidate = await GetCandidateOrThrowAsync(id);
 
