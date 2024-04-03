@@ -3,11 +3,12 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { CandidateService } from './candidate.service';
 import { IPosition } from '../../models/position';
 import { ICandidate } from '../../models/candidate';
+import { environment } from '../../../environments/environment.prod';
 
 describe('CandidateService', () => {
   let service: CandidateService;
   let httpMock: HttpTestingController;
-  const apiUrl = 'https://localhost:7017/api/candidate';
+  const apiUrl = `${environment.baseUrl}/candidate`;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -74,21 +75,4 @@ describe('CandidateService', () => {
     expect(req.request.method).toBe('DELETE');
     req.flush(null); // Simulate a successful delete with no content response
   });
-
-  it('getPositions should return a list of positions', () => {
-    const dummyPositions: IPosition[] = [
-      { positionId: 1, title: 'Developer' },
-      { positionId: 2, title: 'Tester' }
-    ];
-
-    service.getPositions().subscribe(positions => {
-      expect(positions.length).toBe(2);
-      expect(positions).toEqual(dummyPositions);
-    });
-
-    const req = httpMock.expectOne(`https://localhost:7017/api/Position`);
-    expect(req.request.method).toBe('GET');
-    req.flush(dummyPositions);
-  });
-
 });

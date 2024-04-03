@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { env } from 'process';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment.prod';
 import { ICandidate } from '../../models/candidate'
 import { IPosition } from '../../models/position';
 
@@ -10,7 +11,7 @@ import { IPosition } from '../../models/position';
   providedIn: 'root'
 })
 export class CandidateService {
-  private apiUrl = 'https://localhost:7017/api/candidate'; // Adjust API URL
+  private apiUrl = `${environment.baseUrl}/candidate`; // Adjust API URL
 
   constructor(private http: HttpClient) { }
 
@@ -32,9 +33,5 @@ export class CandidateService {
 
   getCandidateById(id: number): Observable<ICandidate> {
     return this.http.get<ICandidate>(`${this.apiUrl}/${id}`);
-  }
-
-  getPositions(): Observable<IPosition[]> {
-    return this.http.get<IPosition[]>(`https://localhost:7017/api/Position`);
   }
 }

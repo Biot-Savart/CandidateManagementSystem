@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { env } from 'process';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment.prod';
 import { IPosition } from '../../models/position';
 
 
@@ -9,7 +10,7 @@ import { IPosition } from '../../models/position';
   providedIn: 'root'
 })
 export class PositionService {
-  private apiUrl = 'https://localhost:7017/api/Position'; // Adjust API URL
+  private apiUrl = `${environment.baseUrl}/Position`; // Adjust API URL
 
   constructor(private http: HttpClient) { }
 

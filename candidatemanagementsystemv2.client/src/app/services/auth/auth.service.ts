@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { error } from 'console';
 import { Router } from '@angular/router';
+import { environment } from '../../../environments/environment.prod';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,6 @@ import { Router } from '@angular/router';
 export class AuthService {
   private currentUserSubject: BehaviorSubject<any>;
   public currentUser: Observable<any>;
-  private apiUrl = 'https://localhost:7017'; // Adjust API URL
 
   constructor(private http: HttpClient, private router: Router) {
     this.currentUserSubject = new BehaviorSubject<any>(localStorage.getItem('currentUser') ?? '');
@@ -28,7 +28,7 @@ export class AuthService {
 
   login(username: string, password: string) {
     const headers = new HttpHeaders({ 'Authorization': 'Basic ' + btoa(username + ':' + password) });
-    return this.http.post<any>(`${this.apiUrl}/api/Auth/login`, {}, { headers: headers })
+    return this.http.post<any>(`${environment.baseUrl}/Auth/login`, {}, { headers: headers })
       .pipe(
         map(user => {
         // store user details and basic auth credentials in local storage to keep user logged in between page refreshes

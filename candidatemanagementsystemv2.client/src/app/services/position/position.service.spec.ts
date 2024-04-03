@@ -2,11 +2,12 @@ import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { PositionService } from './position.service';
 import { IPosition } from '../../models/position';
+import { environment } from '../../../environments/environment.prod';
 
 describe('PositionService', () => {
   let service: PositionService;
   let httpMock: HttpTestingController;
-  const apiUrl = 'https://localhost:7017/api/Position';
+  const apiUrl = `${environment.baseUrl}/Position`;
 
   beforeEach(() => {
     TestBed.configureTestingModule({

@@ -3,11 +3,11 @@ import { TestBed } from '@angular/core/testing';
 import { AuthService } from './auth.service';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { environment } from '../../../environments/environment.prod';
 
 describe('AuthService', () => {
   let service: AuthService;
   let httpMock: HttpTestingController;
-  const apiUrl = 'https://localhost:7017'; // Adjust API URL
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -31,7 +31,7 @@ describe('AuthService', () => {
       expect(localStorage.getItem('currentUser')).toEqual(JSON.stringify(mockUser));
     });
 
-    const req = httpMock.expectOne(`${apiUrl}/api/Auth/login`);
+    const req = httpMock.expectOne(`${environment.baseUrl}/Auth/login`);
     expect(req.request.method).toBe('POST');
     req.flush(mockUser); // Simulate a successful login response
   });

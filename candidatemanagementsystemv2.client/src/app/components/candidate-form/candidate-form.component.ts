@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ICandidatePosition, IPosition } from '../../models/position';
 import { ISkill } from '../../models/skill';
 import { CandidateService } from '../../services/candidate/candidate.service';
+import { PositionService } from '../../services/position/position.service';
 
 @Component({
   selector: 'app-candidate-form',
@@ -23,9 +24,13 @@ export class CandidateFormComponent implements OnInit {
   positions: IPosition[] = []; // To store fetched positions
   selectedPositions: number[] = []; // To store selected position IDs
 
-  constructor(private formBuilder: UntypedFormBuilder,
+  constructor(
+    private formBuilder: UntypedFormBuilder,
     private candidateService: CandidateService,
-    private route: ActivatedRoute, private router: Router) { }
+    private positionService: PositionService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
@@ -36,7 +41,7 @@ export class CandidateFormComponent implements OnInit {
     });
 
     // Fetch positions
-    this.candidateService.getPositions().subscribe((positions) => {
+    this.positionService.getPositions().subscribe((positions) => {
       this.positions = positions;
       // Initialize the form array for positions
       this.positions.forEach(() => this.positionsFormArray.value.push(new UntypedFormControl(false)));

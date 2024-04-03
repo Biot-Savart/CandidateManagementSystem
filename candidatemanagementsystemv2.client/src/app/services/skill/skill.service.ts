@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { env } from 'process';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment.prod';
 import { ISkill, ISkillCandidatesCount } from '../../models/skill';
 
 
@@ -9,7 +10,7 @@ import { ISkill, ISkillCandidatesCount } from '../../models/skill';
   providedIn: 'root'
 })
 export class SkillService {
-  private apiUrl = 'https://localhost:7017/api/skill'; // Adjust API URL
+  private apiUrl = `${environment.baseUrl}/skill`; // Adjust API URL
 
   constructor(private http: HttpClient) { }
 

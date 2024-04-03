@@ -2,11 +2,12 @@ import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { SkillService } from './skill.service';
 import { ISkill, ISkillCandidatesCount } from '../../models/skill';
+import { environment } from '../../../environments/environment.prod';
 
 describe('SkillService', () => {
   let service: SkillService;
   let httpMock: HttpTestingController;
-  const apiUrl = 'https://localhost:7017/api/skill';
+  const apiUrl = `${environment.baseUrl}/skill`;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
