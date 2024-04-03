@@ -12,3 +12,8 @@ mat-form-field {
 button {
   margin-top: 20px;
 }
+
+.error-message {
+  color: red;
+  margin: 15px;
+}

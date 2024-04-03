@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { error } from 'console';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -12,13 +13,17 @@ export class AuthService {
   public currentUser: Observable<any>;
   private apiUrl = 'https://localhost:7017'; // Adjust API URL
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private router: Router) {
     this.currentUserSubject = new BehaviorSubject<any>(localStorage.getItem('currentUser') ?? '');
     this.currentUser = this.currentUserSubject.asObservable();
   }
 
   public get currentUserValue() {
     return this.currentUserSubject.value;
+  }
+
+  public get currentUserOb(): Observable<any> {
+    return this.currentUserSubject.asObservable();
   }
 
   login(username: string, password: string) {
@@ -34,7 +39,6 @@ export class AuthService {
       },
         ),
         catchError(error => {
-          debugger;
           // Handle the error here
           console.error('Login error:', error);
 
@@ -46,9 +50,11 @@ export class AuthService {
   }
 
   logout() {
-    debugger;
     // remove user from local storage to log user out
     localStorage.removeItem('currentUser');
     this.currentUserSubject.next(null);
+
+    // Navigate to login or home page
+    this.router.navigate(['/login']);
   }
 }

@@ -15,7 +15,13 @@ export class AuthInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     // add authorization header with basic auth credentials if available
-    let currentUser = JSON.parse(this.authenticationService.currentUserValue);
+    let currentUser = this.authenticationService.currentUserValue;
+    if (!currentUser || currentUser.length === 0)
+      return next.handle(request);
+
+    if (currentUser && typeof(currentUser) === 'string')
+      currentUser = JSON.parse(this.authenticationService.currentUserValue);
+
     if (currentUser && currentUser.authdata) {
       request = request.clone({
         setHeaders: {
