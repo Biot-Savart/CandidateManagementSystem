@@ -1,7 +1,6 @@
-﻿using CandidateManagementSystemV2.Server.Data;
-using CandidateManagementSystemV2.Server.Models;
+﻿using CandidateManagementSystemV2.Server.DTOs;
+using CandidateManagementSystemV2.Server.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace CandidateManagementSystemV2.Server.Controllers
 {
@@ -9,88 +8,37 @@ namespace CandidateManagementSystemV2.Server.Controllers
     [ApiController]
     public class SkillController : ControllerBase
     {
-        private readonly CandidateDBContext _context;
+        private readonly ISkillService _skillService;
 
-        public SkillController(CandidateDBContext context)
+        public SkillController(ISkillService skillService)
         {
-            _context = context;
+            _skillService = skillService;
         }
 
         // GET: api/Skills
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Skill>>> GetSkills()
+        public async Task<ActionResult<IEnumerable<SkillDto>>> GetSkills()
         {
-            return await _context.Skills.ToListAsync();
+            var poitionsDto = await _skillService.GetAllSkillsAsync();
+
+            return Ok(poitionsDto);
         }
 
         // GET: api/Skills/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Skill>> GetSkill(int id)
+        public async Task<ActionResult<SkillDto>> GetSkill(int id)
         {
-            var skill = await _context.Skills.FindAsync(id);
+            var poitionDto = await _skillService.GetSkillByIdAsync(id);
 
-            if (skill == null)
-            {
-                return NotFound();
-            }
-
-            return skill;
+            return Ok(poitionDto);
         }
 
-        // POST: api/Skills
-        [HttpPost]
-        public async Task<ActionResult<Skill>> PostSkill(Skill skill)
+        [HttpGet("skill-candidates-count")]
+        public async Task<ActionResult<IEnumerable<SkillCandidateCountDto>>> GetSkillCandidateCount()
         {
-            _context.Skills.Add(skill);
-            await _context.SaveChangesAsync();
+            var reportData = await _skillService.GetSkillCandidateCount();
 
-            return CreatedAtAction(nameof(GetSkill), new { id = skill.SkillId }, skill);
-        }
-
-        // PUT: api/Skills/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutSkill(int id, Skill skill)
-        {
-            if (id != skill.SkillId)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(skill).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!_context.Skills.Any(e => e.SkillId == id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // DELETE: api/Skills/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteSkill(int id)
-        {
-            var skill = await _context.Skills.FindAsync(id);
-            if (skill == null)
-            {
-                return NotFound();
-            }
-
-            _context.Skills.Remove(skill);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            return Ok(reportData);
         }
     }
 }

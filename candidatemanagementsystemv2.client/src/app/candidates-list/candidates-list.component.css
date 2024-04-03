@@ -5,3 +5,9 @@ table.mat-table {
 #addBtn {
     margin-left:auto;
 }
+
+.table-container {
+  overflow-x: auto;
+  max-width: 100%;
+  min-width: 375px;
+}

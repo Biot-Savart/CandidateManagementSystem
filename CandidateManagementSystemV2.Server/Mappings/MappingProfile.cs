@@ -18,6 +18,7 @@ namespace CandidateManagementSystemV2.Server.Mappings
             CreateMap<CandidatePosition, CandidatePositionDto>();
             CreateMap<PositionDto, Position>();
             CreateMap<Position, PositionDto>();
+            CreateMap<SkillCandidateCountDto, Skill>();
             // Add other mappings as needed
         }
     }

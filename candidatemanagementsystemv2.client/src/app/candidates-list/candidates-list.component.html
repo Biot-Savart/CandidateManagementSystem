@@ -1,69 +1,71 @@
-<mat-toolbar color="primary">
+<mat-toolbar color="secondary">
   <span>Candidates List</span>
   <span class="spacer"></span>
   <button mat-raised-button color="accent" routerLink="/candidate-form" id="addBtn">Add New Candidate</button>
 </mat-toolbar>
 
 <div class="mat-elevation-z8">
-  <table mat-table [dataSource]="candidates" class="mat-elevation-z8">
+  <div class="table-container">
+    <table mat-table [dataSource]="candidates" class="mat-elevation-z8">
 
-    <!-- Name Column -->
-    <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef> Name </th>
-      <td mat-cell *matCellDef="let candidate">
-        {{candidate.name}} {{
+      <!-- Name Column -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef> Name </th>
+        <td mat-cell *matCellDef="let candidate">
+          {{candidate.name}} {{
 candidate.id
-        }}
-      </td>
-    </ng-container>
-    <!-- Email Column -->
-    <ng-container matColumnDef="email">
-      <th mat-header-cell *matHeaderCellDef> Email </th>
-      <td mat-cell *matCellDef="let candidate">
-        {{
+          }}
+        </td>
+      </ng-container>
+      <!-- Email Column -->
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef> Email </th>
+        <td mat-cell *matCellDef="let candidate">
+          {{
 candidate.email
-        }}
-      </td>
-    </ng-container>
+          }}
+        </td>
+      </ng-container>
 
-    <!-- Phone Column -->
-    <ng-container matColumnDef="phone">
-      <th mat-header-cell *matHeaderCellDef> Phone </th>
-      <td mat-cell *matCellDef="let candidate"> {{candidate.phone}} </td>
-    </ng-container>
+      <!-- Phone Column -->
+      <ng-container matColumnDef="phone">
+        <th mat-header-cell *matHeaderCellDef fxHide.xs> Phone </th>
+        <td mat-cell *matCellDef="let candidate" fxHide.xs> {{candidate.phone}} </td>
+      </ng-container>
 
-    <!-- Name Column -->
-    <ng-container matColumnDef="experience">
-      <th mat-header-cell *matHeaderCellDef> Years Experience </th>
-      <td mat-cell *matCellDef="let candidate"> {{candidate.experience}} </td>
-    </ng-container>
+      <!-- Experience Column -->
+      <ng-container matColumnDef="experience">
+        <th mat-header-cell *matHeaderCellDef fxHide.xs> Years Experience </th>
+        <td mat-cell *matCellDef="let candidate" fxHide.xs> {{candidate.experience}} </td>
+      </ng-container>
 
-    <!-- Skills Column -->
-    <ng-container matColumnDef="skills">
-      <th mat-header-cell *matHeaderCellDef> Skills </th>
-      <td mat-cell *matCellDef="let candidate"> {{candidate.skills | skillsDisplay}} </td>
-    </ng-container>
+      <!-- Skills Column -->
+      <ng-container matColumnDef="skills">
+        <th mat-header-cell *matHeaderCellDef fxHide.xs> Skills </th>
+        <td mat-cell *matCellDef="let candidate" fxHide.xs> {{candidate.skills | skillsDisplay}} </td>
+      </ng-container>
 
-    <!-- Skills Column -->
-    <ng-container matColumnDef="positions">
-      <th mat-header-cell *matHeaderCellDef> Positions </th>
-      <td mat-cell *matCellDef="let candidate"> {{candidate.candidatePositions | positionsDisplay}} </td>
-    </ng-container>
+      <!-- Skills Column -->
+      <ng-container matColumnDef="positions">
+        <th mat-header-cell *matHeaderCellDef> Positions </th>
+        <td mat-cell *matCellDef="let candidate"> {{candidate.candidatePositions | positionsDisplay}} </td>
+      </ng-container>
 
-    <!-- Actions Column -->
-    <ng-container matColumnDef="actions">
-      <th mat-header-cell *matHeaderCellDef> Actions </th>
-      <td mat-cell *matCellDef="let candidate">
-        <button mat-icon-button color="primary" [routerLink]="['/candidate-edit', candidate.candidateId]">
-          <mat-icon>edit</mat-icon>
-        </button>
-        <button mat-icon-button color="warn" (click)="deleteCandidate(candidate.candidateId)">
-          <mat-icon>delete</mat-icon>
-        </button>
-      </td>
-    </ng-container>
+      <!-- Actions Column -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef> Actions </th>
+        <td mat-cell *matCellDef="let candidate">
+          <button mat-icon-button color="primary" [routerLink]="['/candidate-edit', candidate.candidateId]">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="deleteCandidate(candidate.candidateId)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  </table>
-</div>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    </div>
+  </div>
