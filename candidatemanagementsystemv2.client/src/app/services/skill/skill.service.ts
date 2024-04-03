@@ -8,9 +8,6 @@ import { ISkill, ISkillCandidatesCount } from '../../models/skill';
 @Injectable({
   providedIn: 'root'
 })
-@Injectable({
-  providedIn: 'root'
-})
 export class SkillService {
   private apiUrl = 'https://localhost:7017/api/skill'; // Adjust API URL
 

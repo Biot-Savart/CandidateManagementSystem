@@ -8,9 +8,6 @@ import { IPosition } from '../../models/position';
 @Injectable({
   providedIn: 'root'
 })
-@Injectable({
-  providedIn: 'root'
-})
 export class PositionService {
   private apiUrl = 'https://localhost:7017/api/Position'; // Adjust API URL
 

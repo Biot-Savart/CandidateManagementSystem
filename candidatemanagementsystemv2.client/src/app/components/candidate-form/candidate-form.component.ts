@@ -157,7 +157,7 @@ export class CandidateFormComponent implements OnInit {
         this.skills.removeAt(0);
       }
 
-      candidate.skills.forEach(skill => {
+      candidate.skills?.forEach(skill => {
         this.addSkill(skill);
       });
 

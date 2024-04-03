@@ -6,7 +6,7 @@ export interface ICandidate {
   name: string;
   email?: string;
   phone?: string;
-  skills: ISkill[];
+  skills?: ISkill[];
   experience?: number;
   candidatePositions?: ICandidatePosition[];
 }
